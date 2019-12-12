@@ -35,11 +35,11 @@ export default {
                 times
             }
         },
-        // methods: {
-        //     checkFilter(category, title, checked){
-        //         this.$emit('check-filter', category, title, checked);
-        //     }
-        // },
+        methods: {
+            checkFilter(category, title, checked){
+                this.$emit('check-filter', category, title, checked);
+            }
+        },
         components: {
             CheckFilter
         }

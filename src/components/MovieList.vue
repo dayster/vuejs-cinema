@@ -3,10 +3,17 @@
         <div v-if="filteredMovies.length">
             <movie-item 
                 v-for="movie in filteredMovies" 
-                v-bind:movie="movie.movie" 
-                v-bind:sessions="movie.sessions"
-                v-bind:day="day"
-                v-bind:time="time">
+                v-bind:movie="movie.movie">
+                <div class="movie-sessions">
+                <div 
+                    v-for="session in filterSessions(movie.sessions)" 
+                    class="session-time-wrapper tooltip-wrapper"
+                    v-tooltip="{ seats: session.seats }"
+                    v-bind:key="session.id"
+                    >
+                        <div class="session-time">{{ formatSessionTime(session.time) }}</div>
+                    </div>
+                </div>
             </movie-item>
         </div>
         <div v-else-if="movies.length" class="no-results">
@@ -25,6 +32,12 @@ import MovieItem from './MovieItem.vue';
 export default {
     props: ['genre', 'time','movies', 'day'],
     methods: {
+        formatSessionTime(raw){
+            return this.$moment(raw).format('h:mm A');
+        },
+        filterSessions(sessions){
+            return sessions.filter(this.sessionPassesTimeFilter);
+        },
         moviePassesGenreFilter(movie){
             if(!this.genre.length){
                 return true;
